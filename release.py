@@ -1,6 +1,6 @@
 import hashlib
 from pathlib import Path
-from zipfile import ZIP_LZMA, ZipFile
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from tqdm import tqdm
 
@@ -11,7 +11,7 @@ RELEASE_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def zip_dir(directory: Path, output_path: Path):
-    with ZipFile(output_path, 'w', compression=ZIP_LZMA) as zip_file:
+    with ZipFile(output_path, 'w', compression=ZIP_DEFLATED, compresslevel=9) as zip_file:
         for file_path in tqdm(sorted(directory.glob('*')), desc=f'Zipping to {output_path.name}', unit=' files'):
             if file_path.is_file():
                 zip_file.writestr(file_path.name, file_path.read_bytes())
